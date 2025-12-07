@@ -475,9 +475,19 @@ namespace MazeGuy
 
         private void DrawMaze(Vector2 manScreenPos, float alpha)
         {
-            for (int x = 0; x < WIDTH; x++)
+            // Only draw visible tiles (culling)
+            int tileSize = 32; // texture.Width * 2
+            int viewWidth = GraphicsDevice.Viewport.Width;
+            int viewHeight = GraphicsDevice.Viewport.Height;
+
+            int startX = Math.Max(0, (int)manAnimationPos.X - (viewWidth / tileSize / 2) - 1);
+            int endX = Math.Min(WIDTH, (int)manAnimationPos.X + (viewWidth / tileSize / 2) + 2);
+            int startY = Math.Max(0, (int)manAnimationPos.Y - (viewHeight / tileSize / 2) - 1);
+            int endY = Math.Min(HEIGHT, (int)manAnimationPos.Y + (viewHeight / tileSize / 2) + 2);
+
+            for (int x = startX; x < endX; x++)
             {
-                for (int y = 0; y < HEIGHT; y++)
+                for (int y = startY; y < endY; y++)
                 {
                     Texture2D texture = textures[(int)maze[x, y]];
                     Color color = Color.White;
