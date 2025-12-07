@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using System.IO;
-using System.Runtime.InteropServices;
+using File = System.IO.FileShim;
 
 namespace MazeGuy
 {
@@ -38,7 +34,7 @@ namespace MazeGuy
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public partial class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -56,14 +52,8 @@ namespace MazeGuy
         bool on_a_step = false;
         bool start;
         SpriteFont font;
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            AllocConsole();
-        }
+        bool dead = false;
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -233,7 +223,6 @@ namespace MazeGuy
                     }
                 }
             }
-            Environment.Exit(0);
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -514,7 +503,7 @@ namespace MazeGuy
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            Vector2 manScreenPos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2);
+            Vector2 manScreenPos = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             if (!won && !start)
             {
                 if ((manPos - manAnimationPos).Length() < stepSize)
@@ -582,18 +571,12 @@ namespace MazeGuy
                 else
                 {
                     spriteBatch.DrawString(font, "Congratulations! Yow Won!", new Vector2(300, 300), Color.Gold);
-                    spriteBatch.End();
-                    System.Threading.Thread.Sleep(1000);
-                    Environment.Exit(0);
                 }
-               
+
             }
             else
             {
                 spriteBatch.DrawString(font, "You didn't choose a start!", new Vector2(300, 300), Color.Gold);
-                spriteBatch.End();
-                System.Threading.Thread.Sleep(1000);
-                Environment.Exit(0);
             }
             spriteBatch.End();
             base.Draw(gameTime);

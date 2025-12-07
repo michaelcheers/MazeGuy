@@ -5,7 +5,7 @@ namespace MazeGuy
     public partial class Game1
     {
         // Embedded levels - stored as string arrays
-        private static readonly Dictionary<int, string[]> Levels = new Dictionary<int, string[]>
+        public static readonly Dictionary<int, string[]> Levels = new Dictionary<int, string[]>
         {
             { 2, new string[] {
                 "s      #   #   ####   #    ######    ##      #    #  #",
