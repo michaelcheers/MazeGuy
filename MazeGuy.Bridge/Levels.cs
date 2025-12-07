@@ -8,11 +8,6 @@ namespace MazeGuy
         private static readonly Dictionary<int, string[]> Levels = new Dictionary<int, string[]>
         {
             { 1, new string[] {
-                "tuu",
-                "  #",
-                "s_#"
-            }},
-            { 2, new string[] {
                 "s      #   #   ####   #    ######    ##      #    #  #",
                 "#####  # # # # #### # #  #      #         #  #    #  #",
                 "       # # # #      #         #     ##    #  #  # #  #",
@@ -40,11 +35,11 @@ namespace MazeGuy
                 "                                               #     x",
                 "######################################################"
             }},
-            { 3, new string[] {
+            { 2, new string[] {
                 "siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiidddddddddddddddddddddddddddddddddddddddoooooooooooooooooo33333,,,,,,;[['['nbbvdfdgffdddddddddddddddmmmmm,m,mmmmmnbbffgtyutrr",
                 "iiiiiiiiiiiiiiiiiiiiigggggggggggggggggggggggggggeqqqttttoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiim"
             }},
-            { 100, new string[] {
+            { 3, new string[] {
                 "siiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooooooooooxooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
                 "                                                                        do",
                 "                                                                        do",
@@ -55,7 +50,7 @@ namespace MazeGuy
                 "dddddddddiiiddddddddddddd_iiiioooooodooooodiiiddoiiiiioiiddddddddddddddddo   ",
                 "ooooooooxoooooxooooooooooooooooxooooooooooooxooooooooooooooooooooooooooooo"
             }},
-            { 101, new string[] {
+            { 4, new string[] {
                 "eeeeexniiiiiiiiiiisssssssfsdrdddddettreeeeeewqqqsssseiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiit",
                 "",
                 "",
