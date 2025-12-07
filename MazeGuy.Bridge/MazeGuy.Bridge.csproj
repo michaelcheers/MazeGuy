@@ -57,28 +57,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\exit.png">
+    <Content Include="bridge\Content\exit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\floor.png">
+    <Content Include="bridge\Content\floor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\guy.png">
+    <Content Include="bridge\Content\guy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\ice.png">
+    <Content Include="bridge\Content\ice.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Pit.png">
+    <Content Include="bridge\Content\Pit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\step.png">
+    <Content Include="bridge\Content\step.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\wall.png">
+    <Content Include="bridge\Content\wall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\SpriteFont1.spritefont">
+    <Content Include="bridge\Content\SpriteFont1.spritefont">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
