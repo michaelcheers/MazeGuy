@@ -1,0 +1,8 @@
+{
+  "output": "$(OutDir)/bridge",
+  "autoPropertyToField": true,
+  "generateDocumentation": false,
+  "rules": {
+    "anonymousType": "Plain"
+  }
+}
