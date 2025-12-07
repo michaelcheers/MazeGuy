@@ -51,7 +51,7 @@ namespace MazeGuy
         bool on_a_step = false;
         bool start;
         SpriteFont font;
-        int level = 1;
+        int level = 2;
         float stepSize = 0.1f;
 
         public Game1()

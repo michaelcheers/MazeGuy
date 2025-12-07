@@ -7,7 +7,7 @@ namespace MazeGuy
         // Embedded levels - stored as string arrays
         private static readonly Dictionary<int, string[]> Levels = new Dictionary<int, string[]>
         {
-            { 1, new string[] {
+            { 2, new string[] {
                 "s      #   #   ####   #    ######    ##      #    #  #",
                 "#####  # # # # #### # #  #      #         #  #    #  #",
                 "       # # # #      #         #     ##    #  #  # #  #",
@@ -35,11 +35,11 @@ namespace MazeGuy
                 "                                               #     x",
                 "######################################################"
             }},
-            { 2, new string[] {
+            { 3, new string[] {
                 "siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiidddddddddddddddddddddddddddddddddddddddoooooooooooooooooo33333,,,,,,;[['['nbbvdfdgffdddddddddddddddmmmmm,m,mmmmmnbbffgtyutrr",
                 "iiiiiiiiiiiiiiiiiiiiigggggggggggggggggggggggggggeqqqttttoiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiim"
             }},
-            { 3, new string[] {
+            { 4, new string[] {
                 "siiiiiiiiiiiiiiiiiiiiiooooooooooooooooooooooooooooooooooooooooooooooooooxooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
                 "                                                                        do",
                 "                                                                        do",
@@ -50,7 +50,7 @@ namespace MazeGuy
                 "dddddddddiiiddddddddddddd_iiiioooooodooooodiiiddoiiiiioiiddddddddddddddddo   ",
                 "ooooooooxoooooxooooooooooooooooxooooooooooooxooooooooooooooooooooooooooooo"
             }},
-            { 4, new string[] {
+            { 5, new string[] {
                 "eeeeexniiiiiiiiiiisssssssfsdrdddddettreeeeeewqqqsssseiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiit",
                 "",
                 "",
