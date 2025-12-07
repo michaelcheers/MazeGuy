@@ -4,8 +4,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MazeGuy
 {
@@ -31,7 +35,10 @@ namespace MazeGuy
         COUNT
     }
 
-    public partial class Game1 : Microsoft.Xna.Framework.Game
+    /// <summary>
+    /// This is the main type for your game
+    /// </summary>
+    public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -43,81 +50,69 @@ namespace MazeGuy
         Vector2 manPos = new Vector2(0, 0);
         Vector2 manAnimationPos = new Vector2(0, 0);
         Vector2 manStepping = new Vector2(0, 0);
-        Vector2 startPos = new Vector2(0, 0);
         KeyboardState oldState;
         bool won = false;
-        bool dead = false;
         bool on_the_wall = false;
         bool on_a_step = false;
         bool start;
         SpriteFont font;
-        int level = 2;
-        float stepSize = 0.1f;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            AllocConsole();
+        }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
-            LoadLevel(level);
-        }
 
-        private void LoadLevel(int levelNum)
-        {
-            if (!Levels.ContainsKey(levelNum))
-            {
-                won = true;
-                return;
-            }
-
-            string[] look = Levels[levelNum];
-            WIDTH = look.Max(line => line.Length);
+            // MICHAEL - an exercise for you, instead of building the maze like this,
+            // make it load C:/Users/Public/Public Documents/maze.txt
+            // # = wall
+            // s = player start
+            // x = exit
+            // i = ice
+            //   = floor
+            // _ = step
+            //graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferHeight = 768;
+            //graphics.PreferredBackBufferWidth = 1366;
+            string[] look = File.ReadAllLines("../Maze.txt");
+            WIDTH = look[0].Length;
             HEIGHT = look.Length;
             maze = new TileType[WIDTH, HEIGHT];
-
-            // Initialize all tiles to floor
-            for (int x = 0; x < WIDTH; x++)
-            {
-                for (int y = 0; y < HEIGHT; y++)
-                {
-                    maze[x, y] = TileType.Floor;
-                }
-            }
-
-            int py = 0;
+            int y = 0;
+            int x = 0;
             start = true;
             foreach (string s in look)
             {
-                int px = 0;
+                x = 0;
                 foreach (char c in s)
                 {
-                    ParseTile(c, px, py);
-                    px++;
+                    Eqiuvalent(c, x, y);
+                    x++;
                 }
-                py++;
+                y++;
             }
-
-            if (start)
-            {
-                // No start position found, default to 0,0
-                manPos = new Vector2(0, 0);
-                start = false;
-            }
-
-            startPos = manPos;
-            manAnimationPos = manPos;
-            stepSize = 0.1f;
-            on_a_step = false;
-            on_the_wall = false;
-            won = false;
-            dead = false;
         }
 
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
         protected override void Initialize()
         {
+            // TODO: Add your initialization logic here
+
             base.Initialize();
         }
-
-        protected void ParseTile(char c, int x, int y)
+        protected void Eqiuvalent(char c, int x, int y)
         {
             try
             {
@@ -132,7 +127,6 @@ namespace MazeGuy
                 else if (c == 's')
                 {
                     manPos = new Vector2(x, y);
-                    maze[x, y] = TileType.Floor;
                     start = false;
                 }
                 else if (c == 'i')
@@ -151,6 +145,17 @@ namespace MazeGuy
                 {
                     maze[x, y] = TileType.KillingFloor;
                 }
+                else
+                {
+                    maze[x, y] = TileType.Wall;
+                } if (c == 'x')
+                {
+                    maze[x, y] = TileType.Exit;
+                }
+                else if (c == ' ')
+                {
+                    maze[x, y] = TileType.Floor;
+                }
                 else if (c == 'u')
                 {
                     maze[x, y] = TileType.UnclimableWall;
@@ -159,34 +164,88 @@ namespace MazeGuy
                 {
                     maze[x, y] = TileType.KillingStep;
                 }
-                else if (c == '#')
+                else if (c == 's')
                 {
-                    maze[x, y] = TileType.Wall;
+                    manPos = new Vector2(x, y);
+                    start = false;
+                }
+                else if (c == 'i')
+                {
+                    maze[x, y] = TileType.Ice;
+                }
+                else if (c == '_')
+                {
+                    maze[x, y] = TileType.Step;
+                }
+                else if (Char.ToUpper(c) == 'O')
+                {
+                    maze[x, y] = TileType.Pit;
+                }
+                else if (c == 'd')
+                {
+                    maze[x, y] = TileType.KillingFloor;
                 }
                 else
                 {
                     maze[x, y] = TileType.Wall;
                 }
             }
-            catch
+            catch (IndexOutOfRangeException)
             {
+
             }
         }
-
-        protected void Die()
+        protected void Die(GameTime gameTime)
         {
-            dead = true;
+            System.Windows.Forms.MessageBox.Show("You Lost MazeGuy!", "MazeGuy", System.Windows.Forms.MessageBoxButtons.OK);
+            System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show("Would you like to restart?", "MazeGuy", System.Windows.Forms.MessageBoxButtons.YesNo);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                new Game1().Run();
+            }
+            else
+            {
+                result = System.Windows.Forms.MessageBox.Show("Would you like to restart the level?", "MazeGuy", System.Windows.Forms.MessageBoxButtons.YesNo);
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    if (File.Exists("../Maze " + level + ".txt"))
+                    {
+                        stepSize = 0.2f;
+                        on_a_step = false;
+                        on_the_wall = false;
+                        string[] look = File.ReadAllLines("../Maze " + level + ".txt");
+                        WIDTH = look[0].Length;
+                        HEIGHT = look.Length;
+                        maze = new TileType[WIDTH, HEIGHT];
+                        int y = 0;
+                        int x = 0;
+                        start = true;
+                        foreach (string s in look)
+                        {
+                            x = 0;
+                            foreach (char c in s)
+                            {
+                                Eqiuvalent(c, x, y);
+                                x++;
+                            }
+                            y++;
+                        }
+                    }
+                }
+            }
+            Environment.Exit(0);
         }
-
-        protected void RestartLevel()
-        {
-            LoadLevel(level);
-        }
-
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
         protected override void LoadContent()
         {
+            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // TODO: use this.Content to load your game content here
+            Texture2D iceTex = Content.Load<Texture2D>("ice");
             textures[(int)TileType.Ice] = Content.Load<Texture2D>("ice");
             textures[(int)TileType.Exit] = Content.Load<Texture2D>("exit");
             textures[(int)TileType.Wall] = Content.Load<Texture2D>("wall");
@@ -197,41 +256,26 @@ namespace MazeGuy
             textures[(int)TileType.KillingStep] = textures[(int)TileType.Step];
             textures[(int)TileType.UnclimableWall] = textures[(int)TileType.Wall];
             manTexture = Content.Load<Texture2D>("guy");
-
+            
             font = Content.Load<SpriteFont>("SpriteFont1");
         }
 
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
         protected override void UnloadContent()
         {
+            // TODO: Unload any non ContentManager content here
         }
-
+        float stepSize = 0.1f;
+        /// <summary>
+        /// Allows the game to run; logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (dead || won)
-            {
-                KeyboardState ks = Keyboard.GetState();
-                if (ks.WasKeyJustPressed(Keys.Space, oldState) || ks.WasKeyJustPressed(Keys.Enter, oldState))
-                {
-                    if (dead)
-                    {
-                        RestartLevel();
-                    }
-                    else if (won)
-                    {
-                        level++;
-                        LoadLevel(level);
-                    }
-                }
-                if (ks.WasKeyJustPressed(Keys.R, oldState))
-                {
-                    level = 1;
-                    LoadLevel(level);
-                }
-                oldState = ks;
-                base.Update(gameTime);
-                return;
-            }
-
             try
             {
                 if (maze[(int)manPos.X, (int)manPos.Y] != TileType.Step)
@@ -239,213 +283,240 @@ namespace MazeGuy
                     on_a_step = false;
                 }
             }
-            catch
+            catch(IndexOutOfRangeException)
             {
-            }
 
+            }
+            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
             KeyboardState state = Keyboard.GetState();
-
-            // Restart level with R
-            if (state.WasKeyJustPressed(Keys.R, oldState))
-            {
-                RestartLevel();
-                oldState = state;
-                base.Update(gameTime);
-                return;
-            }
-
+            // TODO: Add your update logic here
+            
             Vector2 newPos = manPos;
-            if (state.WasKeyJustPressed(Keys.Left, oldState) || state.WasKeyJustPressed(Keys.A, oldState))
+            if (state.WasKeyJustPressed(Keys.Left, oldState))
             {
                 newPos.X--;
             }
-            if (state.WasKeyJustPressed(Keys.Right, oldState) || state.WasKeyJustPressed(Keys.D, oldState))
+            if (state.WasKeyJustPressed(Keys.Right, oldState))
             {
                 newPos.X++;
             }
-            if (state.WasKeyJustPressed(Keys.Up, oldState) || state.WasKeyJustPressed(Keys.W, oldState))
+            if (state.WasKeyJustPressed(Keys.Up, oldState))
             {
                 newPos.Y--;
             }
-            if (state.WasKeyJustPressed(Keys.Down, oldState) || state.WasKeyJustPressed(Keys.S, oldState))
+            if (state.WasKeyJustPressed(Keys.Down, oldState))
             {
                 newPos.Y++;
             }
-
             try
             {
                 TileType newTile = maze[(int)newPos.X, (int)newPos.Y];
                 if (on_a_step)
                 {
-                    ProcessMovementOnStep(newPos, newTile);
+                    if (newTile == TileType.Ice)
+                    {
+                        if (manPos.X > newPos.X)
+                            manPos = new Vector2(newPos.X - 1, newPos.Y);
+                        else if (manPos.X < newPos.X)
+                            manPos = new Vector2(newPos.X + 1, newPos.Y);
+                        else if (manPos.Y > newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y - 1);
+                        else if (manPos.Y < newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y + 1);
+                    }
+                    else if (newTile == TileType.Exit)
+                    {
+                        won = true;
+                    }
+                    else if (newTile == TileType.Step)
+                    {
+                        on_a_step = true;
+                    }
+                    else if ((newTile == TileType.KillingFloor) || (newTile == TileType.Pit) || (newTile == TileType.KillingStep))
+                    {
+                        Die(gameTime);
+                    }
+                    else if (newTile == TileType.UnclimableWall)
+                    {
+                        
+                    }
+                    else
+                    {
+                        manPos = newPos;
+                    }
                 }
                 else if (on_the_wall)
                 {
-                    ProcessMovementOnWall(newPos, newTile);
+                    if (newTile == TileType.Ice)
+                    {
+                        if (manPos.X > newPos.X)
+                            manPos = new Vector2(newPos.X - 1, newPos.Y);
+                        else if (manPos.X < newPos.X)
+                            manPos = new Vector2(newPos.X + 1, newPos.Y);
+                        else if (manPos.Y > newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y - 1);
+                        else if (manPos.Y < newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y + 1);
+                        if (manPos.X > WIDTH)
+                        {
+                            manPos.X = WIDTH - 1;
+                        }
+                        else if (manPos.X < 0)
+                        {
+                            manPos.X = 0;
+                        }
+                        else if (manPos.Y > HEIGHT)
+                        {
+                            manPos.Y = HEIGHT - 1;
+                        }
+                        else if (manPos.Y < 0)
+                        {
+                            manPos.Y = 0;
+                        }
+                    }
+                    else if (newTile == TileType.Exit)
+                    {
+                        won = true;
+                    }
+                    else if (newTile == TileType.UnclimableWall)
+                    {
+
+                    }
+                    else if (newTile == TileType.Step)
+                    {
+                        on_a_step = true;
+                        on_the_wall = !on_the_wall;
+                        if (manPos.X > newPos.X)
+                            manPos = new Vector2(newPos.X - 1, newPos.Y);
+                        else if (manPos.X < newPos.X)
+                            manPos = new Vector2(newPos.X + 1, newPos.Y);
+                        else if (manPos.Y > newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y - 1);
+                        else if (manPos.Y < newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y + 1);
+                        if (manPos.X > WIDTH)
+                        {
+                            manPos.X = WIDTH - 1;
+                        }
+                        else if (manPos.X < 0)
+                        {
+                            manPos.X = 0;
+                        }
+                        else if (manPos.Y > HEIGHT)
+                        {
+                            manPos.Y = HEIGHT - 1;
+                        }
+                        else if (manPos.Y < 0)
+                        {
+                            manPos.Y = 0;
+                        }
+                    }
+                    else if (newTile == TileType.KillingFloor || newTile == TileType.KillingStep || newTile == TileType.Pit || newTile == TileType.Floor || newTile == TileType.KillingStep)
+                    {
+                        Die(gameTime);
+                    }
+                    else
+                    {
+                        manPos = newPos;
+                    }
                 }
                 else
                 {
-                    ProcessMovementNormal(newPos, newTile);
+                    if (newTile == TileType.Ice)
+                    {
+                        if (manPos.X > newPos.X)
+                            manPos = new Vector2(newPos.X - 1, newPos.Y);
+                        else if (manPos.X < newPos.X)
+                            manPos = new Vector2(newPos.X + 1, newPos.Y);
+                        else if (manPos.Y > newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y - 1);
+                        else if (manPos.Y < newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y + 1);
+                        if (manPos.X > WIDTH)
+                        {
+                            manPos.X = WIDTH - 1;
+                        }
+                        else if (manPos.X < 0)
+                        {
+                            manPos.X = 0;
+                        }
+                        else if (manPos.Y > HEIGHT)
+                        {
+                            manPos.Y = HEIGHT - 1;
+                        }
+                        else if (manPos.Y < 0)
+                        {
+                            manPos.Y = 0;
+                        }
+                    }
+                    else if (newTile == TileType.Exit)
+                    {
+                        won = true;
+                    }
+                    else if (newTile == TileType.UnclimableWall || newTile == TileType.Wall)
+                    {
+
+                    }
+                    else if (newTile == TileType.Step)
+                    {
+                        on_a_step = true;
+                        on_the_wall = !on_the_wall;
+                        if (manPos.X > newPos.X)
+                            manPos = new Vector2(newPos.X - 1, newPos.Y);
+                        else if (manPos.X < newPos.X)
+                            manPos = new Vector2(newPos.X + 1, newPos.Y);
+                        else if (manPos.Y > newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y - 1);
+                        else if (manPos.Y < newPos.Y)
+                            manPos = new Vector2(newPos.X, newPos.Y + 1);
+                        if (manPos.X > WIDTH)
+                        {
+                            manPos.X = WIDTH - 1;
+                        }
+                        else if (manPos.X < 0)
+                        {
+                            manPos.X = 0;
+                        }
+                        else if (manPos.Y > HEIGHT)
+                        {
+                            manPos.Y = HEIGHT - 1;
+                        }
+                        else if (manPos.Y < 0)
+                        {
+                            manPos.Y = 0;
+                        }
+                    }
+                    else if (newTile == TileType.KillingFloor || newTile == TileType.Pit || newTile == TileType.KillingStep)
+                    {
+                        Die(gameTime);
+                    }
+                    else
+                    {
+                        manPos = newPos;
+                    }
                 }
                 oldState = state;
             }
-            catch
+            catch (IndexOutOfRangeException)
             {
             }
             base.Update(gameTime);
         }
-
-        private void ProcessMovementOnStep(Vector2 newPos, TileType newTile)
-        {
-            if (newTile == TileType.Ice)
-            {
-                SlideOnIce(newPos);
-            }
-            else if (newTile == TileType.Exit)
-            {
-                won = true;
-            }
-            else if (newTile == TileType.Step)
-            {
-                on_a_step = true;
-                manPos = newPos;
-            }
-            else if (newTile == TileType.KillingFloor || newTile == TileType.Pit || newTile == TileType.KillingStep)
-            {
-                Die();
-            }
-            else if (newTile == TileType.UnclimableWall)
-            {
-                // Can't move there
-            }
-            else if (newTile != TileType.Wall)
-            {
-                manPos = newPos;
-            }
-        }
-
-        private void ProcessMovementOnWall(Vector2 newPos, TileType newTile)
-        {
-            if (newTile == TileType.Ice)
-            {
-                SlideOnIce(newPos);
-            }
-            else if (newTile == TileType.Exit)
-            {
-                won = true;
-            }
-            else if (newTile == TileType.UnclimableWall)
-            {
-                // Can't move there
-            }
-            else if (newTile == TileType.Step)
-            {
-                on_a_step = true;
-                on_the_wall = !on_the_wall;
-                SlideOnIce(newPos);
-            }
-            else if (newTile == TileType.KillingFloor || newTile == TileType.KillingStep || newTile == TileType.Pit || newTile == TileType.Floor)
-            {
-                Die();
-            }
-            else
-            {
-                manPos = newPos;
-            }
-        }
-
-        private void ProcessMovementNormal(Vector2 newPos, TileType newTile)
-        {
-            if (newTile == TileType.Ice)
-            {
-                SlideOnIce(newPos);
-            }
-            else if (newTile == TileType.Exit)
-            {
-                won = true;
-            }
-            else if (newTile == TileType.UnclimableWall || newTile == TileType.Wall)
-            {
-                // Can't move there
-            }
-            else if (newTile == TileType.Step)
-            {
-                on_a_step = true;
-                on_the_wall = !on_the_wall;
-                SlideOnIce(newPos);
-            }
-            else if (newTile == TileType.KillingFloor || newTile == TileType.Pit || newTile == TileType.KillingStep)
-            {
-                Die();
-            }
-            else
-            {
-                manPos = newPos;
-            }
-        }
-
-        private void SlideOnIce(Vector2 newPos)
-        {
-            if (manPos.X > newPos.X)
-                manPos = new Vector2(newPos.X - 1, newPos.Y);
-            else if (manPos.X < newPos.X)
-                manPos = new Vector2(newPos.X + 1, newPos.Y);
-            else if (manPos.Y > newPos.Y)
-                manPos = new Vector2(newPos.X, newPos.Y - 1);
-            else if (manPos.Y < newPos.Y)
-                manPos = new Vector2(newPos.X, newPos.Y + 1);
-
-            ClampPosition();
-        }
-
-        private void ClampPosition()
-        {
-            if (manPos.X >= WIDTH)
-                manPos.X = WIDTH - 1;
-            else if (manPos.X < 0)
-                manPos.X = 0;
-            if (manPos.Y >= HEIGHT)
-                manPos.Y = HEIGHT - 1;
-            else if (manPos.Y < 0)
-                manPos.Y = 0;
-        }
-
+        int level = 1;
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            // TODO: Add your drawing code here
             spriteBatch.Begin();
-
-            Vector2 manScreenPos = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-
-            if (dead)
+            Vector2 manScreenPos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2);
+            if (!won && !start)
             {
-                // Draw maze faded
-                DrawMaze(manScreenPos, 0.3f);
-                spriteBatch.DrawString(font, "You Died!", new Vector2(manScreenPos.X - 50, manScreenPos.Y - 50), Color.Red);
-                spriteBatch.DrawString(font, "Press SPACE to restart level", new Vector2(manScreenPos.X - 130, manScreenPos.Y), Color.White);
-                spriteBatch.DrawString(font, "Press R to restart game", new Vector2(manScreenPos.X - 110, manScreenPos.Y + 30), Color.Gray);
-            }
-            else if (won)
-            {
-                // Auto-advance to next level (like original)
-                level++;
-                if (Levels.ContainsKey(level))
-                {
-                    LoadLevel(level);
-                }
-                else
-                {
-                    // Game complete - no more levels
-                    spriteBatch.DrawString(font, "Congratulations! You Won!", new Vector2(manScreenPos.X - 120, manScreenPos.Y - 30), Color.Gold);
-                    spriteBatch.DrawString(font, "Press R to play again", new Vector2(manScreenPos.X - 100, manScreenPos.Y + 10), Color.White);
-                }
-            }
-            else if (!start)
-            {
-                // Normal gameplay
                 if ((manPos - manAnimationPos).Length() < stepSize)
                 {
                     manAnimationPos = manPos;
@@ -458,60 +529,74 @@ namespace MazeGuy
                     manAnimationPos += step * stepSize;
                 }
 
-                DrawMaze(manScreenPos, 1.0f);
+                for (int x = 0; x < WIDTH; x++)
+                {
+                    for (int y = 0; y < HEIGHT; y++)
+                    {
+                        Texture2D texture = textures[(int)maze[x, y]];
+                        Color color = Color.White;
+                        if (maze[x, y] == TileType.Exit)
+                            color = Color.Gold;
 
-                // Draw player
+                        spriteBatch.Draw(texture, new Rectangle(
+                            (int)((x - manAnimationPos.X) * texture.Width * 2 + manScreenPos.X),
+                            (int)((y - manAnimationPos.Y) * texture.Height * 2 + manScreenPos.Y),
+                            texture.Width * 2,
+                            texture.Height * 2), color);
+                    }
+                }
                 spriteBatch.Draw(manTexture,
                     new Rectangle(
                         (int)(manScreenPos.X),
                         (int)(manScreenPos.Y),
                         manTexture.Width * 2,
-                        manTexture.Height * 2), Color.White);
-
-                // Draw level indicator
-                spriteBatch.DrawString(font, "Level " + level, new Vector2(10, 10), Color.White);
-                spriteBatch.DrawString(font, "Arrow Keys or WASD to move", new Vector2(10, 30), Color.Gray);
-                spriteBatch.DrawString(font, "R to restart", new Vector2(10, 50), Color.Gray);
+                        manTexture.Height * 2), Color.White); 
+            }
+            else if (won)
+            {
+                level++;
+                if (File.Exists("../Maze " + level + ".txt"))
+                {
+                    stepSize = 0.2f;
+                    on_a_step = false;
+                    on_the_wall = false;
+                    string[] look = File.ReadAllLines("../Maze " + level + ".txt");
+                    WIDTH = look[0].Length;
+                    HEIGHT = look.Length;
+                    maze = new TileType[WIDTH, HEIGHT];
+                    int y = 0;
+                    int x = 0;
+                    start = true;
+                    foreach (string s in look)
+                    {
+                        x = 0;
+                        foreach (char c in s)
+                        {
+                            Eqiuvalent(c, x, y);
+                            x++;
+                        }
+                        y++;
+                    }
+                    won = false;
+                }
+                else
+                {
+                    spriteBatch.DrawString(font, "Congratulations! Yow Won!", new Vector2(300, 300), Color.Gold);
+                    spriteBatch.End();
+                    System.Threading.Thread.Sleep(1000);
+                    Environment.Exit(0);
+                }
+               
             }
             else
             {
-                spriteBatch.DrawString(font, "No start position in level!", new Vector2(300, 300), Color.Red);
+                spriteBatch.DrawString(font, "You didn't choose a start!", new Vector2(300, 300), Color.Gold);
+                spriteBatch.End();
+                System.Threading.Thread.Sleep(1000);
+                Environment.Exit(0);
             }
-
             spriteBatch.End();
             base.Draw(gameTime);
-        }
-
-        private void DrawMaze(Vector2 manScreenPos, float alpha)
-        {
-            // Only draw visible tiles (culling)
-            int tileSize = 32; // texture.Width * 2
-            int viewWidth = GraphicsDevice.Viewport.Width;
-            int viewHeight = GraphicsDevice.Viewport.Height;
-
-            int startX = Math.Max(0, (int)manAnimationPos.X - (viewWidth / tileSize / 2) - 1);
-            int endX = Math.Min(WIDTH, (int)manAnimationPos.X + (viewWidth / tileSize / 2) + 2);
-            int startY = Math.Max(0, (int)manAnimationPos.Y - (viewHeight / tileSize / 2) - 1);
-            int endY = Math.Min(HEIGHT, (int)manAnimationPos.Y + (viewHeight / tileSize / 2) + 2);
-
-            for (int x = startX; x < endX; x++)
-            {
-                for (int y = startY; y < endY; y++)
-                {
-                    Texture2D texture = textures[(int)maze[x, y]];
-                    Color color = Color.White;
-                    if (maze[x, y] == TileType.Exit)
-                        color = Color.Gold;
-                    if (alpha < 1.0f)
-                        color = new Color(color.R, color.G, color.B, (byte)(255 * alpha));
-
-                    spriteBatch.Draw(texture, new Rectangle(
-                        (int)((x - manAnimationPos.X) * texture.Width * 2 + manScreenPos.X),
-                        (int)((y - manAnimationPos.Y) * texture.Height * 2 + manScreenPos.Y),
-                        texture.Width * 2,
-                        texture.Height * 2), color);
-                }
-            }
         }
     }
 }
