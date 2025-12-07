@@ -428,11 +428,20 @@ namespace MazeGuy
                 spriteBatch.DrawString(font, "Press SPACE to restart level", new Vector2(manScreenPos.X - 130, manScreenPos.Y), Color.White);
                 spriteBatch.DrawString(font, "Press R to restart game", new Vector2(manScreenPos.X - 110, manScreenPos.Y + 30), Color.Gray);
             }
-            else if (won && !Levels.ContainsKey(level + 1) && level > 1)
+            else if (won)
             {
-                // Game complete
-                spriteBatch.DrawString(font, "Congratulations! You Won!", new Vector2(manScreenPos.X - 120, manScreenPos.Y - 30), Color.Gold);
-                spriteBatch.DrawString(font, "Press R to play again", new Vector2(manScreenPos.X - 100, manScreenPos.Y + 10), Color.White);
+                // Auto-advance to next level (like original)
+                level++;
+                if (Levels.ContainsKey(level))
+                {
+                    LoadLevel(level);
+                }
+                else
+                {
+                    // Game complete - no more levels
+                    spriteBatch.DrawString(font, "Congratulations! You Won!", new Vector2(manScreenPos.X - 120, manScreenPos.Y - 30), Color.Gold);
+                    spriteBatch.DrawString(font, "Press R to play again", new Vector2(manScreenPos.X - 100, manScreenPos.Y + 10), Color.White);
+                }
             }
             else if (!start)
             {

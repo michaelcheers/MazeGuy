@@ -363,10 +363,16 @@ Bridge.assembly("MazeGuy", function ($asm, globals) {
                     this.spriteBatch.DrawString(this.font, "You Died!", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 50, manScreenPos.Y - 50), Microsoft.Xna.Framework.Color.Red.$clone());
                     this.spriteBatch.DrawString(this.font, "Press SPACE to restart level", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 130, manScreenPos.Y), Microsoft.Xna.Framework.Color.White.$clone());
                     this.spriteBatch.DrawString(this.font, "Press R to restart game", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 110, manScreenPos.Y + 30), Microsoft.Xna.Framework.Color.Gray.$clone());
-                } else if (this.won && !MazeGuy.Game1.Levels.containsKey(((this.level + 1) | 0)) && this.level > 1) {
-                    // Game complete
-                    this.spriteBatch.DrawString(this.font, "Congratulations! You Won!", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 120, manScreenPos.Y - 30), Microsoft.Xna.Framework.Color.Gold.$clone());
-                    this.spriteBatch.DrawString(this.font, "Press R to play again", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 100, manScreenPos.Y + 10), Microsoft.Xna.Framework.Color.White.$clone());
+                } else if (this.won) {
+                    // Auto-advance to next level (like original)
+                    this.level = (this.level + 1) | 0;
+                    if (MazeGuy.Game1.Levels.containsKey(this.level)) {
+                        this.LoadLevel(this.level);
+                    } else {
+                        // Game complete - no more levels
+                        this.spriteBatch.DrawString(this.font, "Congratulations! You Won!", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 120, manScreenPos.Y - 30), Microsoft.Xna.Framework.Color.Gold.$clone());
+                        this.spriteBatch.DrawString(this.font, "Press R to play again", new Microsoft.Xna.Framework.Vector2.$ctor2(manScreenPos.X - 100, manScreenPos.Y + 10), Microsoft.Xna.Framework.Color.White.$clone());
+                    }
                 } else if (!this.start) {
                     // Normal gameplay
                     if ((Microsoft.Xna.Framework.Vector2.op_Subtraction(this.manPos.$clone(), this.manAnimationPos.$clone())).Length() < this.stepSize) {
