@@ -1,0 +1,39 @@
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\floor.xnb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\guy.xnb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\wall.xnb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\exit.xnb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.exe
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.pdb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.csprojResolveAssemblyReference.cache
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.exe
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.pdb
+C:\Users\Laurie\Documents\Visual Studio 2010\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\SpriteFont1.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\floor.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\guy.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\wall.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\exit.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\SpriteFont1.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.exe
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.pdb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.csprojResolveAssemblyReference.cache
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.exe
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.pdb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\floor.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\guy.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\wall.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\exit.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\SpriteFont1.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.exe
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\MazeGuy.pdb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.csprojResolveAssemblyReference.cache
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.exe
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\obj\x86\Debug\MazeGuy.pdb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\ice.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\step.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\ice.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\step.xnb
+E:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\Pit.xnb
+F:\Private\Visual Studio 2010 Daddy\Projects\MazeGuy\MazeGuy\MazeGuy\bin\x86\Debug\Content\Pit.xnb
