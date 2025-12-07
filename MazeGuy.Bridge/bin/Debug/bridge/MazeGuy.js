@@ -395,8 +395,18 @@ Bridge.assembly("MazeGuy", function ($asm, globals) {
                 Microsoft.Xna.Framework.Game.prototype.Draw.call(this, gameTime);
             },
             DrawMaze: function (manScreenPos, alpha) {
-                for (var x = 0; x < this.WIDTH; x = (x + 1) | 0) {
-                    for (var y = 0; y < this.HEIGHT; y = (y + 1) | 0) {
+                // Only draw visible tiles (culling)
+                var tileSize = 32; // texture.Width * 2
+                var viewWidth = this.GraphicsDevice.Viewport.Width;
+                var viewHeight = this.GraphicsDevice.Viewport.Height;
+
+                var startX = Math.max(0, ((((Bridge.Int.clip32(this.manAnimationPos.X) - (((Bridge.Int.div(((Bridge.Int.div(viewWidth, tileSize)) | 0), 2)) | 0))) | 0) - 1) | 0));
+                var endX = Math.min(this.WIDTH, ((((Bridge.Int.clip32(this.manAnimationPos.X) + (((Bridge.Int.div(((Bridge.Int.div(viewWidth, tileSize)) | 0), 2)) | 0))) | 0) + 2) | 0));
+                var startY = Math.max(0, ((((Bridge.Int.clip32(this.manAnimationPos.Y) - (((Bridge.Int.div(((Bridge.Int.div(viewHeight, tileSize)) | 0), 2)) | 0))) | 0) - 1) | 0));
+                var endY = Math.min(this.HEIGHT, ((((Bridge.Int.clip32(this.manAnimationPos.Y) + (((Bridge.Int.div(((Bridge.Int.div(viewHeight, tileSize)) | 0), 2)) | 0))) | 0) + 2) | 0));
+
+                for (var x = startX; x < endX; x = (x + 1) | 0) {
+                    for (var y = startY; y < endY; y = (y + 1) | 0) {
                         var texture = this.textures[System.Array.index(this.maze.get([x, y]), this.textures)];
                         var color = Microsoft.Xna.Framework.Color.White.$clone();
                         if (this.maze.get([x, y]) === MazeGuy.TileType.Exit) {
